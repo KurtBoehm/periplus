@@ -1,0 +1,451 @@
+/* Bulma core */
+@import url("https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css");
+/* Font Awesome 6 */
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");
+
+/*******************************************************************************
+ * Definitions copied from Bulma’s `navbar.css` so they apply unconditionally, *
+ * not only under `@media screen and (min-width: 1024px)`.                     *
+ *                                                                             *
+ * The original is licensed under the MIT License:                             *
+ * https://github.com/jgthms/bulma/blob/main/LICENSE.                          *
+ * A copy is available in the file `BulmaLicense`.                             *
+ *******************************************************************************/
+
+/* Make all navbar containers flex rows that stretch vertically to fill the navbar */
+.navbar,
+.navbar-menu,
+.navbar-start,
+.navbar-end {
+  align-items: stretch;
+  display: flex;
+}
+
+/* Define the base navbar height using Bulma’s navbar height variable */
+.navbar {
+  min-height: var(--bulma-navbar-height);
+}
+
+/* Add extra vertical and horizontal padding for the “spaced” navbar variant */
+.navbar.is-spaced {
+  padding: var(--bulma-navbar-padding-vertical) var(--bulma-navbar-padding-horizontal);
+}
+
+/* Vertically center navbar items when the navbar uses the “spaced” variant */
+.navbar.is-spaced .navbar-start,
+.navbar.is-spaced .navbar-end {
+  align-items: center;
+}
+
+/* Round the corners of navbar items and links in the “spaced” navbar variant */
+.navbar.is-spaced a.navbar-item,
+.navbar.is-spaced .navbar-link {
+  border-radius: var(--bulma-radius);
+}
+
+/* Make the main navbar background transparent while preserving item styles */
+.navbar.is-transparent {
+  --bulma-navbar-item-background-a: 0;
+}
+
+/* Ensure dropdown items remain legible on a transparent navbar by giving them a background */
+.navbar.is-transparent .navbar-dropdown a.navbar-item {
+  background-color: hsl(var(--bulma-navbar-h), var(--bulma-navbar-s), calc(var(--bulma-navbar-item-background-l) + var(--bulma-navbar-item-background-l-delta)));
+}
+
+/* Use the “selected item” color tokens for active/selected dropdown items on a transparent navbar */
+.navbar.is-transparent .navbar-dropdown a.navbar-item.is-active,
+.navbar.is-transparent .navbar-dropdown a.navbar-item.is-selected {
+  --bulma-navbar-h: var(--bulma-navbar-item-selected-h);
+  --bulma-navbar-s: var(--bulma-navbar-item-selected-s);
+  --bulma-navbar-l: var(--bulma-navbar-item-selected-l);
+  --bulma-navbar-item-background-l: var(--bulma-navbar-item-selected-background-l);
+  --bulma-navbar-item-color-l: var(--bulma-navbar-item-selected-color-l);
+}
+
+/* Hide the hamburger “burger” icon so the desktop layout is always used */
+.navbar-burger {
+  display: none;
+}
+
+/* Display navbar items and links as flex rows and vertically center their content */
+.navbar-item,
+.navbar-link {
+  align-items: center;
+  display: flex;
+}
+
+/* Allow dropdown items to stretch vertically so the dropdown matches the full navbar height */
+.navbar-item.has-dropdown {
+  align-items: stretch;
+}
+
+/* Rotate the dropdown caret upwards when the dropdown opens above its trigger */
+.navbar-item.has-dropdown-up .navbar-link::after {
+  transform: rotate(135deg) translate(0.25em, -0.25em);
+}
+
+/* Configure upward dropdowns: remove top border, add bottom border, position the panel above */
+.navbar-item.has-dropdown-up .navbar-dropdown {
+  border-bottom-color: var(--bulma-navbar-dropdown-border-color);
+  border-bottom-style: var(--bulma-navbar-dropdown-border-style);
+  border-bottom-width: var(--bulma-navbar-dropdown-border-width);
+  border-radius: var(--bulma-navbar-dropdown-radius) var(--bulma-navbar-dropdown-radius) 0 0;
+  border-top: none;
+  bottom: 100%;
+  box-shadow: 0 -0.5em 0.5em hsla(var(--bulma-scheme-h), var(--bulma-scheme-s), var(--bulma-scheme-invert-l), 0.1);
+  top: auto;
+}
+
+/* Reveal dropdown menus when their parent item is active, hovered, or focused */
+.navbar-item.is-active .navbar-dropdown,
+.navbar-item.is-hoverable:focus .navbar-dropdown,
+.navbar-item.is-hoverable:focus-within .navbar-dropdown,
+.navbar-item.is-hoverable:hover .navbar-dropdown {
+  display: block;
+}
+
+/* Enable animated dropdown appearance for spaced/boxed dropdown variants on hover/focus */
+.navbar.is-spaced .navbar-item.is-active .navbar-dropdown,
+.navbar-item.is-active .navbar-dropdown.is-boxed,
+.navbar.is-spaced .navbar-item.is-hoverable:focus .navbar-dropdown,
+.navbar-item.is-hoverable:focus .navbar-dropdown.is-boxed,
+.navbar.is-spaced .navbar-item.is-hoverable:focus-within .navbar-dropdown,
+.navbar-item.is-hoverable:focus-within .navbar-dropdown.is-boxed,
+.navbar.is-spaced .navbar-item.is-hoverable:hover .navbar-dropdown,
+.navbar-item.is-hoverable:hover .navbar-dropdown.is-boxed {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* Let the navbar-menu expand to fill the remaining horizontal space beside the brand */
+.navbar-menu {
+  flex-grow: 1;
+  flex-shrink: 0;
+}
+
+/* Left-align items in the navbar-start region and push navbar-end to the very right */
+.navbar-start {
+  justify-content: flex-start;
+  margin-inline-end: auto;
+}
+
+/* Right-align items in the navbar-end region and separate it from the start section */
+.navbar-end {
+  justify-content: flex-end;
+  margin-inline-start: auto;
+}
+
+/* Style the base dropdown panel: background, rounded bottom corners, border, and positioning */
+.navbar-dropdown {
+  background-color: var(--bulma-navbar-dropdown-background-color);
+  border-end-start-radius: var(--bulma-navbar-dropdown-radius);
+  border-end-end-radius: var(--bulma-navbar-dropdown-radius);
+  border-top-color: var(--bulma-navbar-dropdown-border-color);
+  border-top-style: var(--bulma-navbar-dropdown-border-style);
+  border-top-width: var(--bulma-navbar-dropdown-border-width);
+  box-shadow: 0 0.5em 0.5em hsla(var(--bulma-scheme-h), var(--bulma-scheme-s), var(--bulma-scheme-invert-l), 0.1);
+  display: none;
+  font-size: 0.875rem;
+  inset-inline-start: 0;
+  min-width: 100%;
+  position: absolute;
+  top: 100%;
+  z-index: var(--bulma-navbar-dropdown-z);
+}
+
+/* Make dropdown items compact and prevent them from wrapping to multiple lines */
+.navbar-dropdown .navbar-item {
+  padding: 0.375rem 1rem;
+  white-space: nowrap;
+}
+
+/* Add extra space on the right of dropdown links for icons or status indicators */
+.navbar-dropdown a.navbar-item {
+  padding-inline-end: 3rem;
+}
+
+/* Set default background and text color for non-active dropdown items */
+.navbar-dropdown a.navbar-item:not(.is-active, .is-selected) {
+  background-color: hsl(var(--bulma-navbar-dropdown-item-h), var(--bulma-navbar-dropdown-item-s), calc(var(--bulma-navbar-dropdown-item-background-l) + var(--bulma-navbar-item-background-l-delta)));
+  color: hsl(var(--bulma-navbar-dropdown-item-h), var(--bulma-navbar-dropdown-item-s), var(--bulma-navbar-dropdown-item-color-l));
+}
+
+/* Style boxed and spaced dropdowns with rounded corners, shadow, and hidden-by-default animation */
+.navbar.is-spaced .navbar-dropdown,
+.navbar-dropdown.is-boxed {
+  border-radius: var(--bulma-navbar-dropdown-boxed-radius);
+  border-top: none;
+  box-shadow: var(--bulma-navbar-dropdown-boxed-shadow);
+  display: block;
+  opacity: 0;
+  pointer-events: none;
+  top: calc(100% + (var(--bulma-navbar-dropdown-offset)));
+  transform: translateY(-5px);
+  transition-duration: var(--bulma-duration);
+  transition-property: opacity, transform;
+}
+
+/* Right-align the dropdown panel so it is anchored to the right edge of its trigger */
+.navbar-dropdown.is-right {
+  left: auto;
+  right: 0;
+}
+
+/* Ensure the navbar divider between dropdown item groups always renders as a visible line */
+.navbar-divider {
+  display: block;
+}
+
+/* Remove default horizontal padding on navbar-brand when it sits inside a container */
+.navbar>.container .navbar-brand,
+.container>.navbar .navbar-brand {
+  margin-inline-start: -0.75rem;
+}
+
+/* Remove default horizontal padding on navbar-menu when it sits inside a container */
+.navbar>.container .navbar-menu,
+.container>.navbar .navbar-menu {
+  margin-inline-end: -0.75rem;
+}
+
+/* Fix navbar to the top or bottom of the viewport on desktop and layer it above content */
+.navbar.is-fixed-bottom-desktop,
+.navbar.is-fixed-top-desktop {
+  left: 0;
+  position: fixed;
+  right: 0;
+  z-index: var(--bulma-navbar-fixed-z);
+}
+
+/* Anchor a desktop-fixed navbar to the bottom edge of the viewport */
+.navbar.is-fixed-bottom-desktop {
+  bottom: 0;
+}
+
+/* Apply a subtle upward-facing shadow for a navbar fixed to the bottom of the screen */
+.navbar.is-fixed-bottom-desktop.has-shadow {
+  box-shadow: 0 -0.125em 0.1875em hsla(var(--bulma-scheme-h), var(--bulma-scheme-s), var(--bulma-scheme-invert-l), 0.1);
+}
+
+/* Anchor a desktop-fixed navbar to the top edge of the viewport */
+.navbar.is-fixed-top-desktop {
+  top: 0;
+}
+
+/* Add top padding so content does not hide under a top-fixed desktop navbar */
+html.has-navbar-fixed-top-desktop,
+body.has-navbar-fixed-top-desktop {
+  padding-top: var(--bulma-navbar-height);
+}
+
+/* Add bottom padding so content does not hide under a bottom-fixed desktop navbar */
+html.has-navbar-fixed-bottom-desktop,
+body.has-navbar-fixed-bottom-desktop {
+  padding-bottom: var(--bulma-navbar-height);
+}
+
+/* Increase top padding when a fixed top navbar uses the “spaced” variant */
+html.has-spaced-navbar-fixed-top,
+body.has-spaced-navbar-fixed-top {
+  padding-top: calc(var(--bulma-navbar-height) + var(--bulma-navbar-padding-vertical) * 2);
+}
+
+/* Increase bottom padding when a fixed bottom navbar uses the “spaced” variant */
+html.has-spaced-navbar-fixed-bottom,
+body.has-spaced-navbar-fixed-bottom {
+  padding-bottom: calc(var(--bulma-navbar-height) + var(--bulma-navbar-padding-vertical) * 2);
+}
+
+/**********************
+ * Custom definitions *
+ **********************/
+
+/* Use the system UI font as the default body typeface for better OS integration */
+body {
+  --bulma-body-family: system-ui, sans-serif;
+}
+
+/* Allow absolutely positioned children to be placed relative to the .hero container */
+.hero.is-relative {
+  position: relative;
+}
+
+/* Force the navbar to use a fixed height that matches Bulma’s navbar height variable */
+.navbar {
+  height: var(--bulma-navbar-height);
+  min-height: var(--bulma-navbar-height);
+}
+
+/* Allow the title element within a navbar item to grow and truncate when space is limited */
+.navbar-item-title {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Remove Bulma’s box shadow from navbar-menu and make it fit content while spanning full width */
+.navbar-menu {
+  box-shadow: unset;
+  flex: 0 1 auto;
+  width: 100dvw;
+  width: -webkit-fill-available;
+}
+
+/* Ensure navbar titles truncate with an ellipsis when they overflow */
+.navbar-title {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Allow the navbar-start section to shrink so its children can truncate instead of overflowing */
+.navbar-start {
+  min-width: 0;
+}
+
+/* Customize the navbar shadow to be thinner and use a simple solid black color */
+.navbar.has-shadow {
+  --bulma-navbar-box-shadow-size: 0 0 0.125em;
+  --bulma-navbar-box-shadow-color: #000;
+}
+
+/* Vertically center table header and body cell content */
+.table td,
+.table th {
+  vertical-align: middle;
+}
+
+/* Position arrow elements absolutely and vertically center them within their container */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
+/* Position left arrows with a fixed offset from the left edge */
+.arrow.is-left {
+  left: 16px;
+}
+
+/* Position right arrows with a fixed offset from the right edge */
+.arrow.is-right {
+  right: 16px;
+}
+
+/* Make viewer images and objects fully fill their container while preserving aspect ratio */
+.viewer-img,
+.viewer-obj {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Utility: force an element to have a fixed width of 32 pixels */
+.wd-32px {
+  width: 32px;
+}
+
+/* Utility: ensure an element never shrinks below 32 pixels wide */
+.min-wd-32px {
+  min-width: 32px;
+}
+
+/* Render title elements as flex containers to align text and supplementary controls */
+.title {
+  display: flex;
+}
+
+/* Allow the main title text to grow and occupy remaining horizontal space */
+.title-text {
+  flex: 1 1 auto;
+}
+
+/* Use tabular (monospaced-width) numerals for better alignment of numbers in table cells */
+.num-cell {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Match file input font size with Bulma’s control size for consistent form styling */
+input[type="file"] {
+  font-size: var(--bulma-control-size);
+}
+
+/* Style the native file input button so it visually matches a Bulma button component */
+input::file-selector-button {
+  --bulma-button-family: false;
+  --bulma-button-weight: var(--bulma-weight-medium);
+  --bulma-button-border-color: var(--bulma-border);
+  --bulma-button-border-style: solid;
+  --bulma-button-border-width: 0px;
+  --bulma-button-padding-vertical: 0.5em;
+  --bulma-button-padding-horizontal: 1em;
+  --bulma-button-focus-border-color: var(--bulma-link-focus-border);
+  --bulma-button-focus-box-shadow-size: 0 0 0 0.125em;
+  --bulma-button-focus-box-shadow-color: hsla(var(--bulma-link-h), var(--bulma-link-s), var(--bulma-link-on-scheme-l), 0.25);
+  --bulma-button-active-color: var(--bulma-link-active);
+  --bulma-button-active-border-color: var(--bulma-link-active-border);
+  --bulma-button-text-color: var(--bulma-text);
+  --bulma-button-text-decoration: underline;
+  --bulma-button-text-hover-background-color: var(--bulma-background);
+  --bulma-button-text-hover-color: var(--bulma-text-strong);
+  --bulma-button-ghost-background: none;
+  --bulma-button-ghost-border-color: transparent;
+  --bulma-button-ghost-color: var(--bulma-link-text);
+  --bulma-button-ghost-decoration: none;
+  --bulma-button-ghost-hover-color: var(--bulma-link);
+  --bulma-button-ghost-hover-decoration: underline;
+  --bulma-button-disabled-background-color: var(--bulma-scheme-main);
+  --bulma-button-disabled-border-color: var(--bulma-border);
+  --bulma-button-disabled-shadow: none;
+  --bulma-button-disabled-opacity: 0.5;
+  --bulma-button-static-color: var(--bulma-text-weak);
+  --bulma-button-static-background-color: var(--bulma-scheme-main-ter);
+  --bulma-button-static-border-color: var(--bulma-border);
+  --bulma-button-h: var(--bulma-link-h);
+  --bulma-button-s: var(--bulma-link-s);
+  --bulma-button-l: var(--bulma-link-l);
+  --bulma-button-background-l: var(--bulma-link-l);
+  --bulma-button-background-l-delta: 0%;
+  --bulma-button-hover-background-l-delta: var(--bulma-hover-background-l-delta);
+  --bulma-button-active-background-l-delta: var(--bulma-active-background-l-delta);
+  --bulma-button-color-l: var(--bulma-link-invert-l);
+  --bulma-button-border-l: var(--bulma-link-l);
+  --bulma-button-border-l-delta: 0%;
+  --bulma-button-hover-border-l-delta: var(--bulma-hover-border-l-delta);
+  --bulma-button-active-border-l-delta: var(--bulma-active-border-l-delta);
+  --bulma-button-focus-border-l-delta: var(--bulma-focus-border-l-delta);
+  --bulma-button-outer-shadow-h: 0;
+  --bulma-button-outer-shadow-s: 0%;
+  --bulma-button-outer-shadow-l: 20%;
+  --bulma-button-outer-shadow-a: 0;
+  --bulma-loading-color: hsl(var(--bulma-button-h), var(--bulma-button-s), var(--bulma-button-color-l));
+  align-items: center;
+  appearance: none;
+  background-color: hsl(var(--bulma-button-h), var(--bulma-button-s), calc(var(--bulma-button-background-l) + var(--bulma-button-background-l-delta)));
+  border-color: hsl(var(--bulma-button-h), var(--bulma-button-s), calc(var(--bulma-button-border-l) + var(--bulma-button-border-l-delta)));
+  border-radius: var(--bulma-control-radius);
+  border-style: var(--bulma-button-border-style);
+  border-width: var(--bulma-button-border-width);
+  box-shadow: 0px 0.0625em 0.125em hsla(var(--bulma-button-outer-shadow-h), var(--bulma-button-outer-shadow-s), var(--bulma-button-outer-shadow-l), var(--bulma-button-outer-shadow-a)), 0px 0.125em 0.25em hsla(var(--bulma-button-outer-shadow-h), var(--bulma-button-outer-shadow-s), var(--bulma-button-outer-shadow-l), var(--bulma-button-outer-shadow-a));
+  color: hsl(var(--bulma-button-h), var(--bulma-button-s), var(--bulma-button-color-l));
+  cursor: pointer;
+  display: inline-flex;
+  font-size: var(--bulma-control-size);
+  font-weight: var(--bulma-button-weight);
+  height: auto;
+  justify-content: center;
+  line-height: var(--bulma-control-line-height);
+  padding-bottom: calc(var(--bulma-button-padding-vertical) - var(--bulma-button-border-width));
+  padding-left: calc(var(--bulma-button-padding-horizontal) - var(--bulma-button-border-width));
+  padding-right: calc(var(--bulma-button-padding-horizontal) - var(--bulma-button-border-width));
+  padding-top: calc(var(--bulma-button-padding-vertical) - var(--bulma-button-border-width));
+  position: relative;
+  text-align: center;
+  transition-duration: var(--bulma-duration);
+  transition-property: background-color, border-color, box-shadow, color;
+  user-select: none;
+  white-space: nowrap;
+}

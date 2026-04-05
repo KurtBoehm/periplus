@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "periplus"
+description = "Flask-based file explorer"
+dynamic = ["version"]
+readme = "ReadMe.md"
+requires-python = ">=3.12"
+license = "MPL-2.0"
+license-files = ["License"]
+authors = [{ name = "Kurt Böhm", email = "kurbo96@gmail.com" }]
+keywords = ["flask", "file explorer", "file browser", "web ui"]
+classifiers = [
+  "Environment :: Web Environment",
+  "Framework :: Flask",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Utilities",
+]
+dependencies = [
+  "click",
+  "fast_html",
+  "flask",
+  "python-magic",
+  "pyvips",
+  "send2trash",
+  "werkzeug",
+]
+
+[project.scripts]
+periplus = "periplus.explorer:cli"
+
+[project.urls]
+Homepage = "https://github.com/KurtBoehm/periplus"
+Repository = "https://github.com/KurtBoehm/periplus"
+Issues = "https://github.com/KurtBoehm/periplus/issues"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = { attr = "periplus.__version__" }
+
+[tool.setuptools.package-data]
+periplus = [
+  "static/favicon-16.png",
+  "static/favicon-32.png",
+  "static/favicon-64.png",
+  "static/favicon.svg",
+  "static/file.svg",
+  "static/folder.js",
+  "static/folder.svg",
+  "static/user.css",
+  "static/viewer.js",
+]
