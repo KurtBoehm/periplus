@@ -1,4 +1,4 @@
-# <img src="./src/periplus/static/favicon.svg" style="height: 1em;"/> Periplus
+# <img src="https://raw.githubusercontent.com/KurtBoehm/periplus/main/src/periplus/static/favicon.svg" style="height: 1em;"/> Periplus
 
 Periplus (from Latin _periplūs_ “account of a voyage” and Ancient Greek _περίπλους_ “voyage, naval manoeuvre, account of a voyage”) is a web file explorer built with Flask and Bulma.
 It serves the current working directory over HTTP with a sortable, keyboard-friendly UI and on-the-fly ZIP downloads.
@@ -15,6 +15,15 @@ It serves the current working directory over HTTP with a sortable, keyboard-frie
 - Send files/folders to the system wastebasket instead of deleting outright
 - Responsive UI based on Bulma, no JavaScript framework
 - No internet access required when run locally
+
+### ⚙️ Minimal JavaScript
+
+Periplus is designed to rely on JavaScript as little as possible; JavaScript only adds the following extras:
+
+- Uploads keep file modification times
+- Keyboard navigation in the viewer (← → Esc)
+- “Select all” and checkbox-based multi-file ZIP downloads
+- Smoother navigation (no extra history entries, in-place delete refresh)
 
 ## 📦 Installation
 

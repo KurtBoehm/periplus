@@ -1,3 +1,9 @@
+# This file is part of https://github.com/KurtBoehm/periplus.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
 import datetime as dt
 import os
 from importlib.resources import files
@@ -399,6 +405,49 @@ def _file_view_route(fp: Path, args: Args) -> str:
     )
 
 
+def _breadcrumb(fp: Path, args: Args) -> fh.Tag:
+    """
+    Return a breadcrumb-style path starting with a root icon, where each
+    component is a link to its directory, preserving navigation arguments.
+    """
+
+    # Root icon: always present.
+    root_icon = fh.span(fh.i(class_="fas fa-house"))
+
+    # If there is no deeper path, just show the root icon.
+    fp_parts = fp.parts
+    if not fp_parts:
+        return fh.span([root_icon], class_="title-text")
+
+    # Add a link to root.
+    parts: list[fh.Tag | str] = []
+    parts.append(
+        fh.a(
+            root_icon,
+            href=_browse_url(Path("."), args.inherit),
+            class_="breadcrumb-link",
+        )
+    )
+
+    # For each component of fp, add "/" then that component as a link
+    curr = Path(".")
+    for i, part in enumerate(fp_parts):
+        curr = curr / part
+        parts.append("/")
+        if i + 1 < len(fp_parts):
+            parts.append(
+                fh.a(
+                    part,
+                    href=_browse_url(curr, args.inherit),
+                    class_="breadcrumb-link",
+                )
+            )
+        else:
+            parts.append(part)
+
+    return fh.span(parts, class_="title-text")
+
+
 def _col_title(name: str, sort: str, p: Path, args: Args) -> fh.Tag:
     """
     Return a sortable table header link for column ``name`` and sort key ``sort``.
@@ -470,7 +519,9 @@ def _folder_route(fp: Path, args: Args) -> str:
     dl_url = _path_to_url(fp, {}, prefix="/download")
     dl = _icon_link("download", dl_url, classes=["is-link", "is-dl"])
     header_buttons = fh.div([hide, dl], class_="buttons")
-    header = [fh.span(str(fp), class_="title-text"), header_buttons]
+
+    breadcrumb = fh.span(_breadcrumb(fp, args), class_="title-text")
+    header = [breadcrumb, header_buttons]
 
     # Table header: selection, icon, name, size, modified, actions.
     head_cb = fh.input_(type="checkbox", class_="head-cb")
