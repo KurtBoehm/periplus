@@ -36,13 +36,7 @@ _static_mimetypes: Final[dict[str, str]] = {
 
 
 class Args:
-    """
-    Parsed query parameters for a request.
-
-    Immutable snapshot of request args with convenience accessors.
-
-    :param args: Raw query parameters.
-    """
+    """Parsed query parameters for a request."""
 
     def __init__(self, args: MultiDict[str, str]) -> None:
         # Flag-style Boolean params.
@@ -97,22 +91,11 @@ def _args_str(args: UrlArgs) -> str:
     ``True`` emits the bare key; ``False``/``None`` are omitted.
     """
     joined = "&".join(
-        k if isinstance(v, bool) and v else f"{k}={v}"
+        k if v is True else f"{k}={v}"
         for k, v in args.items()
-        if v is not None and (not isinstance(v, bool) or v)
+        if v not in (None, False)
     )
     return f"?{joined}" if joined else ""
-
-
-def _byte_hr(s: int) -> str:
-    """Return byte count ``s`` formatted as a human-readable string."""
-    if s > 2**30:
-        return f"{s / 2**30:.1f} GiB"
-    if s > 2**20:
-        return f"{s / 2**20:.1f} MiB"
-    if s > 2**10:
-        return f"{s / 2**10:.1f} KiB"
-    return f"{s} B"
 
 
 def _url(p: Path, args: UrlArgs) -> str:
@@ -148,9 +131,7 @@ def _view_url(p: Path, args: UrlArgs) -> str:
 
     Directories are routed to ``/browse`` instead.
     """
-    if p.is_dir():
-        return _browse_url(p, args)
-    return _path_to_url(p, args, prefix="/view")
+    return _browse_url(p, args) if p.is_dir() else _path_to_url(p, args, prefix="/view")
 
 
 def _name_key(p: Path) -> str:
@@ -230,18 +211,15 @@ def _wrap_html(
 
     # Only include class attribute if non-empty.
     body_kwargs = {"class_": " ".join(body_classes)} if body_classes else {}
-    meta = fh.meta(name="viewport", content="width=device-width, initial-scale=1")
 
     head = [
-        meta,
+        fh.meta(name="viewport", content="width=device-width, initial-scale=1"),
         fh.title(title or "Periplus"),
-        # SVG for modern browsers
         fh.link(
             rel="icon",
             type="image/svg+xml",
             href="/static/favicon.svg",
         ),
-        # PNG fallbacks
         fh.link(
             rel="icon",
             type="image/png",
@@ -260,10 +238,7 @@ def _wrap_html(
             sizes="64x64",
             href="/static/favicon-64.png",
         ),
-        fh.link(
-            rel="stylesheet",
-            href="/static/user.css",
-        ),
+        fh.link(rel="stylesheet", href="/static/user.css"),
         *head_add,
     ]
     html = fh.render(fh.html([fh.head(head), fh.body(contents, **body_kwargs)]))
@@ -420,19 +395,18 @@ def _breadcrumb(fp: Path, args: Args) -> fh.Tag:
         return fh.span([root_icon], class_="title-text")
 
     # Add a link to root.
-    parts: list[fh.Tag | str] = []
-    parts.append(
+    parts: list[fh.Tag | str] = [
         fh.a(
             root_icon,
             href=_browse_url(Path("."), args.inherit),
             class_="breadcrumb-link",
         )
-    )
+    ]
 
     # For each component of fp, add "/" then that component as a link
     curr = Path(".")
     for i, part in enumerate(fp_parts):
-        curr = curr / part
+        curr /= part
         parts.append("/")
         if i + 1 < len(fp_parts):
             parts.append(
@@ -465,6 +439,17 @@ def _col_title(name: str, sort: str, p: Path, args: Args) -> fh.Tag:
         href=_browse_url(p, {**args.inherit, "sort": sort}),
         class_="variant-link",
     )
+
+
+def _byte_hr(s: int) -> str:
+    """Return byte count ``s`` formatted as a human-readable string."""
+    if s > 2**30:
+        return f"{s / 2**30:.1f} GiB"
+    if s > 2**20:
+        return f"{s / 2**20:.1f} MiB"
+    if s > 2**10:
+        return f"{s / 2**10:.1f} KiB"
+    return f"{s} B"
 
 
 def _folder_row(p: Path, args: UrlArgs) -> fh.Tag:
@@ -598,7 +583,7 @@ def _create_app() -> Flask:
     @app.route("/static/<fname>")
     def static_file(fname: str) -> Response:
         """Return a static asset bundled in the periplus package."""
-        mimetype = _static_mimetypes.get(fname.split(".")[-1])
+        mimetype = _static_mimetypes.get(fname.rsplit(".", 1)[-1])
         return _send_resources_file(f"static/{fname}", mimetype)
 
     @app.route("/browse/", defaults={"path": ""})
