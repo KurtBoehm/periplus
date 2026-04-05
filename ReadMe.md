@@ -16,7 +16,7 @@ It serves the current working directory over HTTP with a sortable, keyboard-frie
 - Responsive UI based on Bulma, no JavaScript framework
 - No internet access required when run locally
 
-### ⚙️ Minimal JavaScript
+### Minimal JavaScript
 
 Periplus is designed to rely on JavaScript as little as possible; JavaScript only adds the following extras:
 
