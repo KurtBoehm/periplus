@@ -646,7 +646,7 @@ def _create_app() -> Flask:
 
         # Folder download: whole folder or selection.
         if args.selected:
-            selected_paths = [Path(p) for p in args.selected]
+            selected_paths = [Path(unquote(p)) for p in args.selected]
             io = ZipIO(fp, paths=selected_paths)
         else:
             io = ZipIO(fp)

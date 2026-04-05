@@ -87,7 +87,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const c = fileCbs.filter((i) => i.checked).map((i) => i.id);
     if (c.length > 0) {
       event.preventDefault();
-      location.href = dl.href + c.map((i) => `&s=${i}`).join("");
+      location.href =
+        dl.href + "?" + c.map((i) => `s=${encodeURIComponent(i)}`).join("&");
     }
   });
 });

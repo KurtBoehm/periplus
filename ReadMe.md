@@ -1,4 +1,4 @@
-# <img src="https://raw.githubusercontent.com/KurtBoehm/periplus/main/src/periplus/static/favicon.svg" height="20"/> Periplus
+# <img src="https://raw.githubusercontent.com/KurtBoehm/periplus/main/src/periplus/static/favicon.svg" height="22"/> Periplus
 
 Periplus (from Latin _periplūs_ “account of a voyage” and Ancient Greek _περίπλους_ “voyage, naval manoeuvre, account of a voyage”) is a web file explorer built with Flask and Bulma.
 It serves the current working directory over HTTP with a sortable, keyboard-friendly UI and on-the-fly ZIP downloads.
