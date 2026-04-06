@@ -48,14 +48,4 @@ include-package-data = true
 version = { attr = "periplus.__version__" }
 
 [tool.setuptools.package-data]
-periplus = [
-  "static/favicon-16.png",
-  "static/favicon-32.png",
-  "static/favicon-64.png",
-  "static/favicon.svg",
-  "static/file.svg",
-  "static/folder.js",
-  "static/folder.svg",
-  "static/user.css",
-  "static/viewer.js",
-]
+periplus = ["static/*"]

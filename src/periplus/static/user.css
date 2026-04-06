@@ -1,7 +1,7 @@
-/* Bulma core */
-@import url("https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css");
-/* Font Awesome 6 */
-@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");
+/* Bulma 1.0.4 */
+@import url("bulma.min.css");
+/* Font Awesome 7.0.1 */
+@import url("font-awesome.min.css");
 
 /*******************************************************************************
  * Definitions copied from Bulma’s `navbar.css` so they apply unconditionally, *
@@ -316,6 +316,26 @@ body {
 .table td,
 .table th {
   vertical-align: middle;
+}
+
+/* Minimize the width of a table cell */
+td.minw {
+  width: 1%;
+  white-space: nowrap;
+}
+
+/* Prevent the action button container from stretching */
+.buttons.is-actions {
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+  width: auto;
+  white-space: nowrap;
+}
+
+/* Add padding to the action buttons at the end of the title to align them visually with the table */
+.buttons.title-end {
+  padding-inline-end: 0.375em;
 }
 
 /* Position arrow elements absolutely and vertically center them within their container */

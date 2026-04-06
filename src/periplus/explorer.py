@@ -32,6 +32,7 @@ _static_mimetypes: Final[dict[str, str]] = {
     "css": "text/css",
     "svg": "image/svg+xml",
     "png": "image/png",
+    "woff2": "font/woff2",
 }
 
 
@@ -463,16 +464,16 @@ def _folder_row(p: Path, args: UrlArgs) -> fh.Tag:
         _path_to_url(p, args, prefix="/delete"),
         classes=["is-link", "action-button"],
     )
-    buttons = fh.div([dl, delete], class_="buttons", style="flex-wrap: nowrap")
+    buttons = fh.div([dl, delete], class_="buttons is-actions")
 
     return fh.tr(
         [
             fh.td(fh.label(cb, class_="checkbox"), class_="wd-32px"),
             fh.td(icon, class_="wd-32px"),
             fh.td(fh.a(p.name, href=_view_url(p, args))),
-            fh.td(_byte_hr(stat.st_size), class_="num-cell"),
-            fh.td(mod, class_="num-cell"),
-            fh.td(buttons, style="width: 0"),
+            fh.td(_byte_hr(stat.st_size), class_="num-cell minw"),
+            fh.td(mod, class_="num-cell minw"),
+            fh.td(buttons, class_="minw"),
         ]
     )
 
@@ -490,7 +491,7 @@ def _folder_route(fp: Path, args: Args) -> str:
 
     dl_url = _path_to_url(fp, args.inherit, prefix="/download")
     dl = _icon_link("download", dl_url, classes=["is-link", "is-dl"])
-    header_buttons = fh.div([hide, dl], class_="buttons")
+    header_buttons = fh.div([hide, dl], class_="buttons title-end")
 
     breadcrumb = fh.span(_breadcrumb(fp, args), class_="title-text")
     header = [breadcrumb, header_buttons]
