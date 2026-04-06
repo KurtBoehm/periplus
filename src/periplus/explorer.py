@@ -9,7 +9,7 @@ import os
 from importlib.resources import files
 from io import BytesIO
 from pathlib import Path
-from typing import Any, Callable, Final, Literal, override
+from typing import Callable, Final, Literal, override
 from urllib.parse import quote, unquote
 
 import click
@@ -26,7 +26,7 @@ from werkzeug.utils import secure_filename
 from .zip import ZipIO
 
 UrlArgs = dict[str, bool | str | None]
-Key = Callable[[Path], Any]
+Key = Callable[[Path], int | float | str]
 
 _static_mimetypes: Final[dict[str, str]] = {
     "css": "text/css",
@@ -39,15 +39,10 @@ class Args:
     """Parsed query parameters for a request."""
 
     def __init__(self, args: MultiDict[str, str]) -> None:
-        # Flag-style Boolean params.
         self._reverse: bool = "reverse" in args
         self.show_hidden: bool = "show-hidden" in args
-
-        # Single-valued params.
         self._sort: str | None = args.get("sort")
-        self.init: str | None = args.get("init")
 
-        # Multi-valued selection param.
         self.selected: list[str] = args.getlist("s")
 
     @override
@@ -56,7 +51,7 @@ class Args:
         return (
             "Args("
             f"sort={self._sort},reverse={self._reverse},"
-            f"show_hidden={self.show_hidden},init={self.init}"
+            f"show_hidden={self.show_hidden}"
             ")"
         )
 
@@ -96,14 +91,6 @@ def _args_str(args: UrlArgs) -> str:
         if v not in (None, False)
     )
     return f"?{joined}" if joined else ""
-
-
-def _url(p: Path, args: UrlArgs) -> str:
-    """Return an application URL for ``p`` with query arguments ``args``."""
-    argstr = _args_str(args)
-    if not p.parts:
-        return f"/{argstr}"
-    return "".join("/" + quote(part) for part in p.parts) + argstr
 
 
 def _path_to_url(
@@ -190,8 +177,8 @@ def _send_resources_file(rel: str, mimetype: str | None = None) -> Response:
 
 
 def _wrap_html(
-    *contents: Any,
-    head_add: list[Any] | None = None,
+    *contents: fh.Tag,
+    head_add: list[fh.Tag] | None = None,
     body_classes: list[str] | None = None,
     title: str | None = None,
 ) -> str:
@@ -330,7 +317,7 @@ def _file_view_route(fp: Path, args: Args) -> str:
         fh.span(fp.name, class_="navbar-title"),
         class_="navbar-item navbar-item-title",
     )
-    dl = _icon_link("download", _url(fp, {**args.inherit, "download": True}))
+    dl = _icon_link("download", _path_to_url(fp, args.inherit, "/download"))
     nav_end = fh.div(fh.div(dl, class_="buttons"), class_="navbar-item")
     nav_menu = [
         fh.div(nav_start, class_="navbar-start"),
@@ -338,11 +325,11 @@ def _file_view_route(fp: Path, args: Args) -> str:
     ]
 
     # Viewer object/embed.
-    img_url = _path_to_url(fp, {}, prefix="/full-preview")
+    img_url = _path_to_url(fp, args.inherit, prefix="/full-preview")
     img = fh.img(src=img_url, fallback="View", class_="viewer-img")
     obj = fh.object_(
         img,
-        data=_browse_url(fp, {}),
+        data=_browse_url(fp, args.inherit),
         type=magic.from_file(fp, mime=True),
         class_="viewer-obj",
     )
@@ -501,7 +488,7 @@ def _folder_route(fp: Path, args: Args) -> str:
     hide_url = _browse_url(fp, {**args.inherit, "show-hidden": not args.show_hidden})
     hide = _icon_link(hide_icon, hide_url, classes=["is-link", "variant-link"])
 
-    dl_url = _path_to_url(fp, {}, prefix="/download")
+    dl_url = _path_to_url(fp, args.inherit, prefix="/download")
     dl = _icon_link("download", dl_url, classes=["is-link", "is-dl"])
     header_buttons = fh.div([hide, dl], class_="buttons")
 
