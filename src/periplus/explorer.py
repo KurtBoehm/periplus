@@ -471,9 +471,9 @@ def _folder_row(p: Path, args: UrlArgs) -> fh.Tag:
             fh.td(fh.label(cb, class_="checkbox"), class_="wd-32px"),
             fh.td(icon, class_="wd-32px"),
             fh.td(fh.a(p.name, href=_view_url(p, args))),
-            fh.td(_byte_hr(stat.st_size), class_="num-cell minw"),
-            fh.td(mod, class_="num-cell minw"),
-            fh.td(buttons, class_="minw"),
+            fh.td(_byte_hr(stat.st_size), class_="num-cell is-narrow"),
+            fh.td(mod, class_="num-cell is-narrow"),
+            fh.td(buttons, class_="is-narrow"),
         ]
     )
 

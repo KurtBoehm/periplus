@@ -319,7 +319,7 @@ body {
 }
 
 /* Minimize the width of a table cell */
-td.minw {
+td.is-narrow {
   width: 1%;
   white-space: nowrap;
 }
