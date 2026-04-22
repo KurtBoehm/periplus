@@ -3,16 +3,16 @@
 /* Font Awesome 7.0.1 */
 @import url("font-awesome.min.css");
 
-/*******************************************************************************
- * Definitions copied from Bulma’s `navbar.css` so they apply unconditionally, *
- * not only under `@media screen and (min-width: 1024px)`.                     *
- *                                                                             *
- * The original is licensed under the MIT License:                             *
- * https://github.com/jgthms/bulma/blob/main/LICENSE.                          *
- * A copy is available in the file `BulmaLicense`.                             *
- *******************************************************************************/
+/**********************************************************************************
+ * Bulma navbar overrides                                                         *
+ * Copied from Bulma’s `navbar.css` so they apply at all widths (no media query). *
+ *                                                                                *
+ * The original is MIT-licensed:                                                  *
+ *   https://github.com/jgthms/bulma/blob/main/LICENSE                            *
+ * A copy is available in `BulmaLicense`.                                         *
+ **********************************************************************************/
 
-/* Make all navbar containers flex rows that stretch vertically to fill the navbar */
+/* Navbar containers: horizontal flex, children stretch vertically */
 .navbar,
 .navbar-menu,
 .navbar-start,
@@ -21,39 +21,39 @@
   display: flex;
 }
 
-/* Define the base navbar height using Bulma’s navbar height variable */
+/* Base navbar height */
 .navbar {
   min-height: var(--bulma-navbar-height);
 }
 
-/* Add extra vertical and horizontal padding for the “spaced” navbar variant */
+/* Spaced navbar: extra padding */
 .navbar.is-spaced {
   padding: var(--bulma-navbar-padding-vertical) var(--bulma-navbar-padding-horizontal);
 }
 
-/* Vertically center navbar items when the navbar uses the “spaced” variant */
+/* Spaced navbar: center items vertically */
 .navbar.is-spaced .navbar-start,
 .navbar.is-spaced .navbar-end {
   align-items: center;
 }
 
-/* Round the corners of navbar items and links in the “spaced” navbar variant */
+/* Spaced navbar: rounded items/links */
 .navbar.is-spaced a.navbar-item,
 .navbar.is-spaced .navbar-link {
   border-radius: var(--bulma-radius);
 }
 
-/* Make the main navbar background transparent while preserving item styles */
+/* Transparent navbar background */
 .navbar.is-transparent {
   --bulma-navbar-item-background-a: 0;
 }
 
-/* Ensure dropdown items remain legible on a transparent navbar by giving them a background */
+/* Transparent navbar: dropdown items get a background for contrast */
 .navbar.is-transparent .navbar-dropdown a.navbar-item {
   background-color: hsl(var(--bulma-navbar-h), var(--bulma-navbar-s), calc(var(--bulma-navbar-item-background-l) + var(--bulma-navbar-item-background-l-delta)));
 }
 
-/* Use the “selected item” color tokens for active/selected dropdown items on a transparent navbar */
+/* Transparent navbar: active/selected dropdown item colors */
 .navbar.is-transparent .navbar-dropdown a.navbar-item.is-active,
 .navbar.is-transparent .navbar-dropdown a.navbar-item.is-selected {
   --bulma-navbar-h: var(--bulma-navbar-item-selected-h);
@@ -63,29 +63,29 @@
   --bulma-navbar-item-color-l: var(--bulma-navbar-item-selected-color-l);
 }
 
-/* Hide the hamburger “burger” icon so the desktop layout is always used */
+/* Always use desktop layout: hide burger */
 .navbar-burger {
   display: none;
 }
 
-/* Display navbar items and links as flex rows and vertically center their content */
+/* Items/links: flex rows, vertically centered */
 .navbar-item,
 .navbar-link {
   align-items: center;
   display: flex;
 }
 
-/* Allow dropdown items to stretch vertically so the dropdown matches the full navbar height */
+/* Dropdown trigger stretches vertically */
 .navbar-item.has-dropdown {
   align-items: stretch;
 }
 
-/* Rotate the dropdown caret upwards when the dropdown opens above its trigger */
+/* Upward dropdown: caret points up */
 .navbar-item.has-dropdown-up .navbar-link::after {
   transform: rotate(135deg) translate(0.25em, -0.25em);
 }
 
-/* Configure upward dropdowns: remove top border, add bottom border, position the panel above */
+/* Upward dropdown: place panel above trigger */
 .navbar-item.has-dropdown-up .navbar-dropdown {
   border-bottom-color: var(--bulma-navbar-dropdown-border-color);
   border-bottom-style: var(--bulma-navbar-dropdown-border-style);
@@ -97,7 +97,7 @@
   top: auto;
 }
 
-/* Reveal dropdown menus when their parent item is active, hovered, or focused */
+/* Show dropdown when parent is active/hovered/focused */
 .navbar-item.is-active .navbar-dropdown,
 .navbar-item.is-hoverable:focus .navbar-dropdown,
 .navbar-item.is-hoverable:focus-within .navbar-dropdown,
@@ -105,7 +105,7 @@
   display: block;
 }
 
-/* Enable animated dropdown appearance for spaced/boxed dropdown variants on hover/focus */
+/* Animated dropdown for spaced/boxed variants */
 .navbar.is-spaced .navbar-item.is-active .navbar-dropdown,
 .navbar-item.is-active .navbar-dropdown.is-boxed,
 .navbar.is-spaced .navbar-item.is-hoverable:focus .navbar-dropdown,
@@ -119,25 +119,25 @@
   transform: translateY(0);
 }
 
-/* Let the navbar-menu expand to fill the remaining horizontal space beside the brand */
+/* Navbar menu grows to fill space beside brand */
 .navbar-menu {
   flex-grow: 1;
   flex-shrink: 0;
 }
 
-/* Left-align items in the navbar-start region and push navbar-end to the very right */
+/* Start section: left-aligned, pushes end section right */
 .navbar-start {
   justify-content: flex-start;
   margin-inline-end: auto;
 }
 
-/* Right-align items in the navbar-end region and separate it from the start section */
+/* End section: right-aligned */
 .navbar-end {
   justify-content: flex-end;
   margin-inline-start: auto;
 }
 
-/* Style the base dropdown panel: background, rounded bottom corners, border, and positioning */
+/* Base dropdown panel styling and positioning */
 .navbar-dropdown {
   background-color: var(--bulma-navbar-dropdown-background-color);
   border-end-start-radius: var(--bulma-navbar-dropdown-radius);
@@ -155,24 +155,24 @@
   z-index: var(--bulma-navbar-dropdown-z);
 }
 
-/* Make dropdown items compact and prevent them from wrapping to multiple lines */
+/* Compact dropdown items, single line */
 .navbar-dropdown .navbar-item {
   padding: 0.375rem 1rem;
   white-space: nowrap;
 }
 
-/* Add extra space on the right of dropdown links for icons or status indicators */
+/* Extra right padding for dropdown links (icons/status) */
 .navbar-dropdown a.navbar-item {
   padding-inline-end: 3rem;
 }
 
-/* Set default background and text color for non-active dropdown items */
+/* Default dropdown item colors (non-active) */
 .navbar-dropdown a.navbar-item:not(.is-active, .is-selected) {
   background-color: hsl(var(--bulma-navbar-dropdown-item-h), var(--bulma-navbar-dropdown-item-s), calc(var(--bulma-navbar-dropdown-item-background-l) + var(--bulma-navbar-item-background-l-delta)));
   color: hsl(var(--bulma-navbar-dropdown-item-h), var(--bulma-navbar-dropdown-item-s), var(--bulma-navbar-dropdown-item-color-l));
 }
 
-/* Style boxed and spaced dropdowns with rounded corners, shadow, and hidden-by-default animation */
+/* Boxed/spaced dropdown: animated floating panel */
 .navbar.is-spaced .navbar-dropdown,
 .navbar-dropdown.is-boxed {
   border-radius: var(--bulma-navbar-dropdown-boxed-radius);
@@ -181,36 +181,36 @@
   display: block;
   opacity: 0;
   pointer-events: none;
-  top: calc(100% + (var(--bulma-navbar-dropdown-offset)));
+  top: calc(100% + var(--bulma-navbar-dropdown-offset));
   transform: translateY(-5px);
   transition-duration: var(--bulma-duration);
   transition-property: opacity, transform;
 }
 
-/* Right-align the dropdown panel so it is anchored to the right edge of its trigger */
+/* Right-aligned dropdown panel */
 .navbar-dropdown.is-right {
   left: auto;
   right: 0;
 }
 
-/* Ensure the navbar divider between dropdown item groups always renders as a visible line */
+/* Always render navbar divider as a line */
 .navbar-divider {
   display: block;
 }
 
-/* Remove default horizontal padding on navbar-brand when it sits inside a container */
+/* Brand inside container: compensate horizontal padding */
 .navbar>.container .navbar-brand,
 .container>.navbar .navbar-brand {
   margin-inline-start: -0.75rem;
 }
 
-/* Remove default horizontal padding on navbar-menu when it sits inside a container */
+/* Menu inside container: compensate horizontal padding */
 .navbar>.container .navbar-menu,
 .container>.navbar .navbar-menu {
   margin-inline-end: -0.75rem;
 }
 
-/* Fix navbar to the top or bottom of the viewport on desktop and layer it above content */
+/* Desktop fixed navbar: layer above content */
 .navbar.is-fixed-bottom-desktop,
 .navbar.is-fixed-top-desktop {
   left: 0;
@@ -219,40 +219,40 @@
   z-index: var(--bulma-navbar-fixed-z);
 }
 
-/* Anchor a desktop-fixed navbar to the bottom edge of the viewport */
+/* Bottom-fixed desktop navbar */
 .navbar.is-fixed-bottom-desktop {
   bottom: 0;
 }
 
-/* Apply a subtle upward-facing shadow for a navbar fixed to the bottom of the screen */
+/* Bottom-fixed shadow (upward) */
 .navbar.is-fixed-bottom-desktop.has-shadow {
   box-shadow: 0 -0.125em 0.1875em hsla(var(--bulma-scheme-h), var(--bulma-scheme-s), var(--bulma-scheme-invert-l), 0.1);
 }
 
-/* Anchor a desktop-fixed navbar to the top edge of the viewport */
+/* Top-fixed desktop navbar */
 .navbar.is-fixed-top-desktop {
   top: 0;
 }
 
-/* Add top padding so content does not hide under a top-fixed desktop navbar */
+/* Top-fixed: avoid content underlap */
 html.has-navbar-fixed-top-desktop,
 body.has-navbar-fixed-top-desktop {
   padding-top: var(--bulma-navbar-height);
 }
 
-/* Add bottom padding so content does not hide under a bottom-fixed desktop navbar */
+/* Bottom-fixed: avoid content underlap */
 html.has-navbar-fixed-bottom-desktop,
 body.has-navbar-fixed-bottom-desktop {
   padding-bottom: var(--bulma-navbar-height);
 }
 
-/* Increase top padding when a fixed top navbar uses the “spaced” variant */
+/* Spaced top-fixed: extra padding */
 html.has-spaced-navbar-fixed-top,
 body.has-spaced-navbar-fixed-top {
   padding-top: calc(var(--bulma-navbar-height) + var(--bulma-navbar-padding-vertical) * 2);
 }
 
-/* Increase bottom padding when a fixed bottom navbar uses the “spaced” variant */
+/* Spaced bottom-fixed: extra padding */
 html.has-spaced-navbar-fixed-bottom,
 body.has-spaced-navbar-fixed-bottom {
   padding-bottom: calc(var(--bulma-navbar-height) + var(--bulma-navbar-padding-vertical) * 2);
@@ -262,37 +262,37 @@ body.has-spaced-navbar-fixed-bottom {
  * Custom definitions *
  **********************/
 
-/* Use the system UI font as the default body typeface for better OS integration */
+/* Use system UI font as base body family */
 body {
   --bulma-body-family: system-ui, sans-serif;
 }
 
-/* Allow absolutely positioned children to be placed relative to the .hero container */
+/* Relative hero anchor for absolutely positioned children */
 .hero.is-relative {
   position: relative;
 }
 
-/* Force the navbar to use a fixed height that matches Bulma’s navbar height variable */
+/* Force navbar to fixed Bulma height */
 .navbar {
   height: var(--bulma-navbar-height);
   min-height: var(--bulma-navbar-height);
 }
 
-/* Allow the title element within a navbar item to grow and truncate when space is limited */
+/* Name cell: allow title to grow and truncate */
 .navbar-item-title {
   flex: 1 1 0;
   min-width: 0;
 }
 
-/* Remove Bulma’s box shadow from navbar-menu and make it fit content while spanning full width */
+/* Navbar menu: no shadow, content-sized but span full width */
 .navbar-menu {
-  box-shadow: unset;
+  box-shadow: none;
   flex: 0 1 auto;
   width: 100dvw;
   width: -webkit-fill-available;
 }
 
-/* Ensure navbar titles truncate with an ellipsis when they overflow */
+/* Truncated single-line navbar title */
 .navbar-title {
   display: block;
   min-width: 0;
@@ -301,30 +301,30 @@ body {
   white-space: nowrap;
 }
 
-/* Allow the navbar-start section to shrink so its children can truncate instead of overflowing */
+/* Navbar start section may shrink, so children can truncate */
 .navbar-start {
   min-width: 0;
 }
 
-/* Customize the navbar shadow to be thinner and use a simple solid black color */
+/* Thinner, solid black navbar shadow */
 .navbar.has-shadow {
   --bulma-navbar-box-shadow-size: 0 0 0.125em;
   --bulma-navbar-box-shadow-color: #000;
 }
 
-/* Vertically center table header and body cell content */
+/* Vertically center table cells */
 .table td,
 .table th {
   vertical-align: middle;
 }
 
-/* Minimize the width of a table cell */
+/* Narrow table cell utility */
 td.is-narrow {
   width: 1%;
   white-space: nowrap;
 }
 
-/* Prevent the action button container from stretching */
+/* Action button group: compact inline flex */
 .buttons.is-actions {
   display: inline-flex;
   flex: 0 0 auto;
@@ -333,29 +333,29 @@ td.is-narrow {
   white-space: nowrap;
 }
 
-/* Add padding to the action buttons at the end of the title to align them visually with the table */
+/* Title-end buttons: visual alignment padding */
 .buttons.title-end {
   padding-inline-end: 0.375em;
 }
 
-/* Position arrow elements absolutely and vertically center them within their container */
+/* Generic centered arrow overlay */
 .arrow {
   position: absolute;
   top: 50%;
   transform: translate(0, -50%);
 }
 
-/* Position left arrows with a fixed offset from the left edge */
+/* Left arrow offset */
 .arrow.is-left {
   left: 16px;
 }
 
-/* Position right arrows with a fixed offset from the right edge */
+/* Right arrow offset */
 .arrow.is-right {
   right: 16px;
 }
 
-/* Make viewer images and objects fully fill their container while preserving aspect ratio */
+/* Viewer content scales to container, keeps aspect ratio */
 .viewer-img,
 .viewer-obj {
   width: 100%;
@@ -363,37 +363,37 @@ td.is-narrow {
   object-fit: contain;
 }
 
-/* Utility: force an element to have a fixed width of 32 pixels */
+/* Utility: fixed 32px width */
 .wd-32px {
   width: 32px;
 }
 
-/* Utility: ensure an element never shrinks below 32 pixels wide */
+/* Utility: min width 32px */
 .min-wd-32px {
   min-width: 32px;
 }
 
-/* Render title elements as flex containers to align text and supplementary controls */
+/* Title as flex row for text + controls */
 .title {
   display: flex;
 }
 
-/* Allow the main title text to grow and occupy remaining horizontal space */
+/* Main title text grows to fill space */
 .title-text {
   flex: 1 1 auto;
 }
 
-/* Use tabular (monospaced-width) numerals for better alignment of numbers in table cells */
+/* Tabular numerals for aligned numbers */
 .num-cell {
   font-variant-numeric: tabular-nums;
 }
 
-/* Match file input font size with Bulma’s control size for consistent form styling */
+/* File input font matches Bulma control size */
 input[type="file"] {
   font-size: var(--bulma-control-size);
 }
 
-/* Style the native file input button so it visually matches a Bulma button component */
+/* Native file button styled like Bulma button */
 input::file-selector-button {
   --bulma-button-family: false;
   --bulma-button-weight: var(--bulma-weight-medium);
@@ -468,4 +468,79 @@ input::file-selector-button {
   transition-property: background-color, border-color, box-shadow, color;
   user-select: none;
   white-space: nowrap;
+}
+
+/* File-name cell layout: icon/controls + truncating link */
+.file-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* DOM: <details> then <a>; visual: link left, controls right */
+.file-name-cell .file-name-link {
+  order: 1;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Rename controls container */
+.file-name-cell .rename-details {
+  order: 2;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+
+/* When editing: hide original name link */
+.file-name-cell .rename-details[open]+.file-name-link {
+  display: none;
+}
+
+/* Open details fills available width */
+.rename-details[open] {
+  width: 100%;
+}
+
+/* Form: take remaining space left of cancel */
+.rename-details .rename-form {
+  order: 2;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* Apply button stays narrow */
+.rename-details .rename-form .button {
+  flex: 0 0 auto;
+  margin-left: 0.25rem;
+}
+
+/* Cancel toggle (summary) on the right */
+.rename-details .rename-summary {
+  order: 3;
+  margin-left: 0.25rem;
+}
+
+/* Hide default <summary> marker */
+.rename-summary {
+  list-style: none;
+}
+
+.rename-summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Closed state: hide form */
+.rename-details:not([open]) .rename-form {
+  display: none;
+}
+
+/* Icon swap: pen → x-mark when open */
+.rename-details:not([open]) .rename-icon-cancel {
+  display: none;
+}
+
+.rename-details[open] .rename-icon-edit {
+  display: none;
 }

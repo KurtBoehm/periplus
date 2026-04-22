@@ -444,25 +444,79 @@ def _folder_row(p: Path, args: UrlArgs) -> fh.Tag:
     """
     Return a table row representation for filesystem entry ``p``.
 
-    Includes selection checkbox and action buttons.
+    Includes selection checkbox, name+rename, and action buttons.
     """
+
+    def _url(prefix: str) -> str:
+        return _path_to_url(p, args, prefix=prefix)
+
     # Per-row selection checkbox.
     cb = fh.input_(type="checkbox", class_="file-cb", id=quote(str(p)))
 
     # Preview icon (folder/file), clicks go to preview endpoint.
-    url = _path_to_url(p, args, prefix="/preview")
     feather = _resources_text(f"static/{'folder' if p.is_dir() else 'file'}.svg")
-    icon = fh.object_(feather, data=url, width=32, height=32)
+    icon = fh.object_(feather, data=_url("/preview"), width=32, height=32)
 
     stat = p.stat()
     mod = dt.datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d %H:%M")
 
-    # Download and delete action buttons.
-    dl = _icon_link("download", _path_to_url(p, args, prefix="/download"))
+    # Name cell: name link + rename details (edit/cancel + form)
+
+    name_link = fh.a(
+        p.name,
+        href=_view_url(p, args),
+        class_="file-name-link",
+    )
+
+    # Summary acts as: "Edit" (pen) when closed, "Cancel" (x-mark) when open.
+    non_edit = fh.span(_icon_span("pen"), class_="rename-icon-edit")
+    edit = fh.span(_icon_span("xmark"), class_="rename-icon-cancel")
+    rename_summary = fh.summary(
+        [non_edit, edit],
+        class_="button is-text rename-summary",
+    )
+
+    # Form: visible only when <details> is open (via CSS).
+    rename_input = fh.input_(
+        type_="text",
+        name="new-name",
+        value=p.name,
+        class_="input",
+    )
+    rename_apply = fh.button(
+        _icon_span("check"),
+        type_="submit",
+        class_="button is-link",
+    )
+    rename_form = fh.form(
+        [
+            fh.div(
+                [
+                    fh.p(rename_input, class_="control is-expanded"),
+                    fh.p(rename_apply, class_="control"),
+                ],
+                class_="field has-addons",
+            )
+        ],
+        method="POST",
+        action=_url("/rename"),
+    )
+
+    # <summary> must be first child.
+    rename_details = fh.details(
+        [rename_summary, rename_form],
+        class_="rename-details",
+    )
+
+    name_cell = fh.td(fh.div([rename_details, name_link], class_="file-name-cell"))
+
+    # Actions: download + delete
+
+    dl = _icon_link("download", _url("/download"))
     delete = _icon_link(
         "trash-can",
-        _path_to_url(p, args, prefix="/delete"),
-        classes=["is-link", "action-button"],
+        _url("/delete"),
+        classes=["is-danger", "action-button"],
     )
     buttons = fh.div([dl, delete], class_="buttons is-actions")
 
@@ -470,7 +524,7 @@ def _folder_row(p: Path, args: UrlArgs) -> fh.Tag:
         [
             fh.td(fh.label(cb, class_="checkbox"), class_="wd-32px"),
             fh.td(icon, class_="wd-32px"),
-            fh.td(fh.a(p.name, href=_view_url(p, args))),
+            name_cell,
             fh.td(_byte_hr(stat.st_size), class_="num-cell is-narrow"),
             fh.td(mod, class_="num-cell is-narrow"),
             fh.td(buttons, class_="is-narrow"),
@@ -515,7 +569,7 @@ def _folder_route(fp: Path, args: Args) -> str:
         type_="file", multiple=True, id_="upload-file", name="upload-file"
     )
     upload_icon = _icon_span("upload")
-    upload_btn = fh.button(upload_icon, type_="submit", class_="button is-link")
+    upload_btn = fh.button(upload_icon, type_="submit", class_="button is-success")
     upload_form = fh.form(
         fh.tr([fh.td(), fh.td(), fh.td(upload_file, colspan=3), fh.td(upload_btn)]),
         method="POST",
@@ -535,7 +589,11 @@ def _folder_route(fp: Path, args: Args) -> str:
         ),
         class_="control",
     )
-    cfold_btn = fh.button(_icon_span("folder"), type_="submit", class_="button is-link")
+    cfold_btn = fh.button(
+        _icon_span("folder"),
+        type_="submit",
+        class_="button is-success",
+    )
     cfold_form = fh.form(
         fh.tr([fh.td(), fh.td(), fh.td(cfold_input, colspan=3), fh.td(cfold_btn)]),
         method="POST",
@@ -590,6 +648,33 @@ def _create_app() -> Flask:
             return send_file(fp.resolve())
 
         return _folder_route(fp, args)
+
+    @app.route("/rename/<path:path>", methods=["POST"])
+    def rename(path: str) -> Response:
+        """
+        Rename the file or directory at ``path`` and redirect back to its parent.
+
+        New name is taken from POST form field ``new-name``.
+        """
+        fp = url2path(path)
+        if not fp.exists():
+            return abort(404)
+
+        new_name = request.form.get("new-name", "").strip()
+        if not new_name:
+            args = Args(request.args)
+            return redirect(_browse_url(fp.parent, args.inherit))
+
+        new_name = os.path.basename(new_name)
+
+        target = fp.parent / new_name
+        if target != fp and target.exists():
+            return abort(409)
+
+        fp.rename(target)
+
+        args = Args(request.args)
+        return redirect(_browse_url(target.parent, args.inherit))
 
     @app.route("/preview/<path:path>")
     def preview(path: str) -> Response:
