@@ -12,6 +12,7 @@ It serves the current working directory over HTTP with a sortable, keyboard-frie
 - Multi-select ZIP download (entire folders or arbitrary selections)
 - File uploads with preserved modification time (when provided by the browser)
 - Create new folders
+- Rename files/folders
 - Send files/folders to the system wastebasket instead of deleting outright
 - Responsive UI based on Bulma, no JavaScript framework
 - No internet access required when run locally
@@ -60,7 +61,8 @@ Periplus uses the first URL segment to indicate the current mode:
 - `GET /preview/...`: small thumbnail previews
 - `GET /full-preview/...`: full-size previews (or suitable conversion)
 - `GET /download/...`: file downloads and on-the-fly ZIP archives
-- `GET /delete/...`: send a file/folder to the trash and redirect
+- `GET /rename/...`: rename a file/folder and redirect
+- `GET /delete/...`: send a file/folder to the wastebasket and redirect
 - `GET /static/...`: built-in CSS and icons
 
 Sorting and visibility state are preserved via query parameters:
