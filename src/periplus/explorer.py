@@ -457,8 +457,12 @@ def _folder_row(p: Path, args: UrlArgs) -> fh.Tag:
     feather = _resources_text(f"static/{'folder' if p.is_dir() else 'file'}.svg")
     icon = fh.object_(feather, data=_url("/preview"), width=32, height=32)
 
-    stat = p.stat()
-    mod = dt.datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d %H:%M")
+    if p.is_file() or p.is_dir():
+        stat = p.stat()
+        byte_size = _byte_hr(stat.st_size)
+        mod = dt.datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d %H:%M")
+    else:
+        byte_size = mod = ""
 
     # Name cell: name link + rename details (edit/cancel + form)
 
@@ -525,7 +529,7 @@ def _folder_row(p: Path, args: UrlArgs) -> fh.Tag:
             fh.td(fh.label(cb, class_="checkbox"), class_="wd-32px"),
             fh.td(icon, class_="wd-32px"),
             name_cell,
-            fh.td(_byte_hr(stat.st_size), class_="num-cell is-narrow"),
+            fh.td(byte_size, class_="num-cell is-narrow"),
             fh.td(mod, class_="num-cell is-narrow"),
             fh.td(buttons, class_="is-narrow"),
         ]
